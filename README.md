@@ -1,2 +1,2 @@
 # spi-sv
-SPI AXI Stream SystemVerilog
+SPI AXI Lite SystemVerilog
