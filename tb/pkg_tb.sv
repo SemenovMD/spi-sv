@@ -7,8 +7,8 @@ package pkg_tb;
 
     parameter   CLK_PERIOD_NS   =   1_000_000_000 / CLOCK;
 
-    parameter   AXI_TRAN_MIN_DELAY = 2;
-    parameter   AXI_TRAN_MAX_DELAY = 17;
+    parameter   AXI_TRAN_MIN_DELAY = 50;
+    parameter   AXI_TRAN_MAX_DELAY = 100;
 
     class AXI_Lite_Master_Write;
         virtual axil_if m_axil_if;
