@@ -1,22 +1,28 @@
 module axil_spi_master
 
-    import  axil_pkg ::*;
+#(
+    parameter   AXI_DATA_WIDTH  = 32,
+    parameter   AXI_ADDR_WIDTH  = 32,
+    parameter   CLOCK           = 100_000_000,
+    parameter   SPI_CLOCK       = 5_000_000
+)
 
 (
+    // Global Signals
     input   logic                               aclk,
     input   logic                               aresetn,
 
-    // SPI Master
+    // Interface SPI Master
     output  logic                               spi_cs,
     output  logic                               spi_sclk,
     output  logic                               spi_mosi,
     input   logic                               spi_miso,
     
-    // AXI-Lite Slave
+    // Interface AXI-Lite Slave
     axil_if.s_axil                              s_axil
 );
 
-    localparam COUNT_SPEED = CLOCK/SPI_FREQ;
+    localparam COUNT_SPEED = CLOCK/SPI_CLOCK;
 
     logic           [7:0]                       spi_reg_addr_wr;
     logic           [7:0]                       spi_reg_data_wr;
@@ -31,7 +37,6 @@ module axil_spi_master
 
     logic           [$clog2(COUNT_SPEED)-1:0]   spi_count_speed;
     logic           [2:0]                       spi_count_bit;
-
 
     // FSM WRITE
     typedef enum logic [1:0]
@@ -353,7 +358,7 @@ module axil_spi_master
                     begin
                         if (spi_count_speed < COUNT_SPEED - 1)
                         begin
-                            state_spi <= DELAY_SPI_1;
+                            state_spi <= DELAY_SPI_2;
                             spi_count_speed <= spi_count_speed + 1;
                         end else
                         begin
@@ -398,25 +403,25 @@ module axil_spi_master
             ADDR_WR_SPI:
                 begin
                     spi_cs = 1'b0;
-                    spi_sclk = (spi_count_speed < COUNT_SPEED/2 - 1) ? 1'b0 : 1'b1;
+                    spi_sclk = (spi_count_speed < COUNT_SPEED/2) ? 1'b0 : 1'b1;
                     spi_mosi = spi_reg_addr_wr[7 - spi_count_bit];
                 end
             DATA_WR_SPI:
                 begin
                     spi_cs = 1'b0;
-                    spi_sclk = (spi_count_speed < COUNT_SPEED/2 - 1) ? 1'b0 : 1'b1;
+                    spi_sclk = (spi_count_speed < COUNT_SPEED/2) ? 1'b0 : 1'b1;
                     spi_mosi = spi_reg_data_wr[7 - spi_count_bit];
                 end
             ADDR_RD_SPI:
                 begin
                     spi_cs = 1'b0;
-                    spi_sclk = (spi_count_speed < COUNT_SPEED/2 - 1) ? 1'b0 : 1'b1;
+                    spi_sclk = (spi_count_speed < COUNT_SPEED/2) ? 1'b0 : 1'b1;
                     spi_mosi = spi_reg_addr_rd[7 - spi_count_bit];
                 end
             DATA_RD_SPI:
                 begin
                     spi_cs = 1'b0;
-                    spi_sclk = (spi_count_speed < COUNT_SPEED/2 - 1) ? 1'b0 : 1'b1;
+                    spi_sclk = (spi_count_speed < COUNT_SPEED/2) ? 1'b0 : 1'b1;
                     spi_mosi = 1'b1;
                 end
         endcase
