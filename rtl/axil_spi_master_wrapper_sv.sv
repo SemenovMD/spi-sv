@@ -54,8 +54,8 @@ module axil_spi_master_wrapper_sv
         assign s_axil.wvalid    = s_axil_wvalid;
         assign s_axil_wready    = s_axil.wready;
 
-        assign s_axil_bvalid    = s_axil.bresp;
-        assign s_axil_bresp     = s_axil.bvalid;
+        assign s_axil_bvalid    = s_axil.bvalid;
+        assign s_axil_bresp     = s_axil.bresp;
         assign s_axil.bready    = s_axil_bready;
 
         assign s_axil.araddr    = s_axil_araddr;
@@ -63,8 +63,8 @@ module axil_spi_master_wrapper_sv
         assign s_axil_arready   = s_axil.arready;
 
         assign s_axil_rdata     = s_axil.rdata;
-        assign s_axil_rvalid    = s_axil.rresp;
-        assign s_axil_rresp     = s_axil.rvalid;
+        assign s_axil_rvalid    = s_axil.rvalid;
+        assign s_axil_rresp     = s_axil.rresp;
         assign s_axil.rready    = s_axil_rready;
     endgenerate
     
